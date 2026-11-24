@@ -1,0 +1,48 @@
+digraph G {
+graph [rankdir=TB, bgcolor="white", pad=0.3, nodesep=0.35, ranksep=0.4, fontname="Times New Roman,", fontsize=12];
+node [shape=box, style="rounded,filled", fontname="Times New Roman,", fontsize=11, color="#2F5597", fillcolor="#EAF2F8", margin="0.12,0.08"];
+edge [fontname="Times New Roman,", fontsize=9, color="#555555"];
+
+subgraph cluster_calc {
+label="DeliveryService.calculate(DeliveryRequest req)"; color="#2F5597"; style="rounded";
+start [label="Начало", shape=oval, fillcolor="#E2F0D9", color="#548235"];
+end [label="Завершение", shape=oval, fillcolor="#FCE4D6", color="#C65911"];
+n1 [label="Получить параметры доставки:\nDeliveryRequest(type, distanceKm, weightKg, orderAmount)", shape=parallelogram, fillcolor="#E4DFEC", color="#7030A0"];
+n2 [label="Определить тип доставки\n(req.type())"];
+n3 [label="A1: Получить политику доставки через Factory по типу запроса\n(factory.get(type) → DeliveryPolicy:\nStandardCourier / Express / Pickup / Postal)"];
+n4 [label="Проверить возможность доставки\nполиморфно (policy.supports(req))"];
+n5 [label="Доставка возможна?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+n6 [label="Рассчитать стоимость полиморфно\n(policy.calculateCost(req)) — формула\nвнутри выбранной политики (R2)"];
+n7 [label="Вернуть стоимость (double)"];
+n8 [label="Выбросить IllegalArgumentException\n(\"Unsupported delivery\", R3)", fillcolor="#FCE4D6", color="#C65911"];
+
+start -> n1;
+n1 -> n2;
+n2 -> n3;
+n3 -> n4;
+n4 -> n5;
+n5 -> n6 [label="да"];
+n5 -> n8 [label="нет"];
+n6 -> n7;
+n7 -> end;
+n8 -> end;
+}
+
+subgraph cluster_b {
+label="Вариант 16, часть Б: DeliveryService.addPostalCost(service, req)"; color="#548235"; style="rounded,dashed";
+b0 [label="Начало", shape=oval, fillcolor="#E2F0D9", color="#548235"];
+b1 [label="service == null или req == null?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+berr [label="Выбросить IllegalArgumentException", fillcolor="#FCE4D6", color="#C65911"];
+b2 [label="Создать запрос с типом POSTAL\nи теми же distanceKm, weightKg, orderAmount"];
+b3 [label="Рассчитать через service.calculate(postal)\n(тот же алгоритм слева: Factory → PostalPolicy)"];
+b4 [label="Вернуть стоимость почтовой доставки"];
+b5 [label="Завершение", shape=oval, fillcolor="#FCE4D6", color="#C65911"];
+b0 -> b1;
+b1 -> berr [label="да"];
+b1 -> b2 [label="нет"];
+b2 -> b3;
+b3 -> b4;
+b4 -> b5;
+berr -> b5;
+}
+}

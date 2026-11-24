@@ -1,0 +1,33 @@
+digraph C {
+graph [rankdir=TB, bgcolor="white", pad=0.3, nodesep=0.45, ranksep=0.8];
+node [shape=record, style="filled", fontname="Times New Roman,", fontsize=11, color="#2F5597", fillcolor="#F7FBFF"];
+edge [fontname="Times New Roman,", fontsize=10, color="#555555"];
+
+sc [label="{SelfCheck|- FACTORY : DeliveryPolicyFactory\l- SERVICE : DeliveryService\l- passed : int\l- failed : int\l|+ main(String[]) : void\l- runUnitChecks() : void\l- runDataChecks() : void\l- runInteractive() : void\l- parseRequest(String[]) : DeliveryRequest\l- report(String, boolean, String) : void\l}"];
+
+s [label="{DeliveryService|- factory : DeliveryPolicyFactory \{final\}\l|+ DeliveryService(DeliveryPolicyFactory)\l+ calculate(DeliveryRequest) : double\l+ addPostalCost(DeliveryService, DeliveryRequest) : double \{static\}\l}"];
+
+f [label="{DeliveryPolicyFactory||+ get(DeliveryType) : DeliveryPolicy\l}"];
+
+p [label="{«interface»\nDeliveryPolicy||+ supports(DeliveryRequest) : boolean\l+ calculateCost(DeliveryRequest) : double\l}"];
+
+std [label="{StandardCourierPolicy|MAX_WEIGHT_KG = 20\lMIN_COST = 500\lCOST_PER_KM = 50\l|+ supports(DeliveryRequest) : boolean\l+ calculateCost(DeliveryRequest) : double\l}"];
+exp [label="{ExpressPolicy|MAX_WEIGHT_KG = 10\lMIN_COST = 1000\lCOST_PER_KM = 100\lINSURANCE_RATE = 0.01\l|+ supports(DeliveryRequest) : boolean\l+ calculateCost(DeliveryRequest) : double\l}"];
+pick [label="{PickupPolicy||+ supports(DeliveryRequest) : boolean\l+ calculateCost(DeliveryRequest) : double\l}"];
+post [label="{PostalPolicy  (вариант 16)|MAX_WEIGHT_KG = 2\lMIN_COST = 300\lCOST_PER_KM = 20\l|+ supports(DeliveryRequest) : boolean\l+ calculateCost(DeliveryRequest) : double\l}", fillcolor="#E2F0D9", color="#548235"];
+
+req [label="{«record»\nDeliveryRequest|type : DeliveryType\ldistanceKm : double\lweightKg : double\lorderAmount : double\l}"];
+t [label="{«enum»\nDeliveryType|STANDARD\lEXPRESS\lPICKUP\lPOSTAL  (вариант 16)\l}"];
+
+sc -> s [label="uses", style=dashed, arrowhead=open];
+s -> f [label="factory 1", arrowtail=odiamond, dir=both, arrowhead=open];
+s -> p [label="uses (полиморфно)", style=dashed, arrowhead=open];
+f -> p [label="creates", style=dashed, arrowhead=open];
+std -> p [label="implements", arrowhead=empty, style=dashed];
+exp -> p [label="implements", arrowhead=empty, style=dashed];
+pick -> p [label="implements", arrowhead=empty, style=dashed];
+post -> p [label="implements", arrowhead=empty, style=dashed];
+p -> req [label="parameter", style=dashed, arrowhead=open];
+req -> t [label="type", arrowhead=open];
+{rank=same; std; exp; pick; post;}
+}
