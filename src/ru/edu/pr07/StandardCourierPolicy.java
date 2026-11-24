@@ -6,13 +6,13 @@ public class StandardCourierPolicy implements DeliveryPolicy {
     static final double MIN_COST = 500.0;
     static final double COST_PER_KM = 50.0;
 
-    // TODO 1: supports
+    // Задание 1 каркаса: supports
     @Override
     public boolean supports(DeliveryRequest req) {
         return req.type() == DeliveryType.STANDARD && req.weightKg() <= MAX_WEIGHT_KG;
     }
 
-    // TODO 2: calculateCost
+    // Задание 2 каркаса: calculateCost
     @Override
     public double calculateCost(DeliveryRequest req) {
         return Math.max(MIN_COST, req.distanceKm() * COST_PER_KM);

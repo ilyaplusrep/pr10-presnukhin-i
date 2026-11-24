@@ -7,13 +7,13 @@ public class ExpressPolicy implements DeliveryPolicy {
     static final double COST_PER_KM = 100.0;
     static final double INSURANCE_RATE = 0.01;
 
-    // TODO 3: supports
+    // Задание 3 каркаса: supports
     @Override
     public boolean supports(DeliveryRequest req) {
         return req.type() == DeliveryType.EXPRESS && req.weightKg() <= MAX_WEIGHT_KG;
     }
 
-    // TODO 4: calculateCost
+    // Задание 4 каркаса: calculateCost
     @Override
     public double calculateCost(DeliveryRequest req) {
         return Math.max(MIN_COST, req.distanceKm() * COST_PER_KM) + req.orderAmount() * INSURANCE_RATE;

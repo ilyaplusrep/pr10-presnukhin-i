@@ -3,7 +3,7 @@ package ru.edu.pr07;
 // R4: фабрика только выбирает реализацию, формул здесь нет
 public class DeliveryPolicyFactory {
 
-    // TODO 5: switch по enum без default — компилятор требует ветку для каждого значения (R9)
+    // Задание 5 каркаса: switch по enum без default — компилятор требует ветку для каждого значения (R9)
     public DeliveryPolicy get(DeliveryType type) {
         if (type == null)
             throw new IllegalArgumentException("type is null");
